@@ -76,26 +76,28 @@ export interface ScoreboardTeam {
 
 export interface BoxScoreResponseBody {
 	metadata: RequestMetadata,
-	boxscore: {
-		allScoringPeriodsInMatchupPeriod: number[],
-		scheduleItems: BoxScoreScheduleItem[]
-		teams: BoxScoreTeam[],
-		progames: {
-			[id:number]: {
-				awayProTeamId:number
-				awayScore:number
-				gameDate:string
-				gameId:number
-				homeProTeamId:number
-				homeScore:number
-				period:number
-				status:number
-				timeRemainingInPeriod:string
-			}
-		},
-		homeTeamBonus: number,
-		scoringPeriodId: number
-	}
+	boxscore: BoxScore
+}
+
+export interface BoxScore {
+	allScoringPeriodsInMatchupPeriod: number[],
+	scheduleItems: BoxScoreScheduleItem[]
+	teams: BoxScoreTeam[],
+	progames: {
+		[id:number]: {
+			awayProTeamId:number
+			awayScore:number
+			gameDate:string
+			gameId:number
+			homeProTeamId:number
+			homeScore:number
+			period:number
+			status:number
+			timeRemainingInPeriod:string
+		}
+	},
+	homeTeamBonus: number,
+	scoringPeriodId: number
 }
 
 export interface BoxScoreScheduleItem {
@@ -205,10 +207,7 @@ export interface BoxScoreTeamSlot {
 		healthStatus: number,
 		draftRank: number,
 		totalPoints: number,
-		eligibleSlotCategoryIds: [
-			number,
-			number
-		],
+		eligibleSlotCategoryIds: number[],
 		proTeamId: number,
 		tickerId: number,
 		sportsId: number,
