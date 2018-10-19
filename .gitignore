@@ -1,0 +1,4 @@
+src/*.js
+src/*.js.map
+.env
+node_modules

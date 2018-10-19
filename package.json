@@ -1,0 +1,21 @@
+{
+  "name": "ffzone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "run": "node src/main.js"
+  },
+  "author": "aogden",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^10.12.0",
+    "typescript": "^3.1.3"
+  },
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "node-fetch": "^2.2.0"
+  }
+}
