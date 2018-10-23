@@ -84,16 +84,16 @@ export interface BoxScore {
 	scheduleItems: BoxScoreScheduleItem[]
 	teams: BoxScoreTeam[],
 	progames: {
-		[id:number]: {
-			awayProTeamId:number
-			awayScore:number
-			gameDate:string
-			gameId:number
-			homeProTeamId:number
-			homeScore:number
-			period:number
-			status:number
-			timeRemainingInPeriod:string
+		[id: number]: {
+			awayProTeamId: number
+			awayScore: number
+			gameDate: string
+			gameId: number
+			homeProTeamId: number
+			homeScore: number
+			period: number
+			status: number
+			timeRemainingInPeriod: string
 		}
 	},
 	homeTeamBonus: number,
@@ -147,26 +147,26 @@ export interface BoxScoreScheduleMatchup {
 }
 
 export interface BoxScoreTeam {
- slots: BoxScoreTeamSlot[],
- teamId: number,
- appliedActiveProjectedTotal: number,
- team: {
-	 division: {
-		 size: number,
-		 divisionName: string,
-		 divisionId: number
-	 },
-	 teamAbbrev: string,
-	 waiverRank: number,
-	 teamId: number,
-	 teamLocation: string,
-	 teamNickname: string,
-	 divisionStanding: number,
-	 logoType: string,
-	 overallStanding: number,
-	 logoUrl: string
- },
- appliedInactiveProjectedTotal: number
+	slots: BoxScoreTeamSlot[],
+	teamId: number,
+	appliedActiveProjectedTotal: number,
+	team: {
+		division: {
+			size: number,
+			divisionName: string,
+			divisionId: number
+		},
+		teamAbbrev: string,
+		waiverRank: number,
+		teamId: number,
+		teamLocation: string,
+		teamNickname: string,
+		divisionStanding: number,
+		logoType: string,
+		overallStanding: number,
+		logoUrl: string
+	},
+	appliedInactiveProjectedTotal: number
 }
 
 export interface BoxScoreTeamSlot {
@@ -185,7 +185,7 @@ export interface BoxScoreTeamSlot {
 	isQueuedWaiverLocked: false,
 	isTradeLocked: false,
 	watchList: false,
-	slotCategoryId: number,
+	slotCategoryId: LineupPosition,
 	player: {
 		lastName: string,
 		percentOwned: number,
@@ -214,3 +214,14 @@ export interface BoxScoreTeamSlot {
 		gameStarterStatus: number
 	},
 }
+
+export enum LineupPosition {
+	'QB' = 0,
+	'RB' = 2,
+	'WR' = 4,
+	'TE' = 6,
+	'Def' = 16,
+	'K' = 17,
+	'Bench' = 20,
+	'Flex' = 23
+};
