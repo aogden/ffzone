@@ -35,17 +35,18 @@ export class DataModel {
 }
 
 export class Team {
-	name: string;
-	teamId: number;
+	name: string = '';
+	teamId: number = 0;
 	record: {
 		overallWins: number;
 		overallLosses: number;
 		overallStanding: number
-	};
-	logoUrl: string;
-	appliedActiveProjectedTotal: number;
-	appliedInactiveProjectedTotal: number;
-	slots: TeamSlot[];
+	} = { overallWins: 0, overallLosses: 0, overallStanding: 0};
+	logoUrl: string = '';
+	appliedActiveProjectedTotal: number = 0;
+	appliedInactiveProjectedTotal: number = 0;
+	totalRealScore: number = 0;
+	slots: TeamSlot[] = [];
 
 	constructor(scoreboardSource: Contracts.ScoreboardTeam, boxscoreSource: Contracts.BoxScoreTeam) {
 		const properties = Object.getOwnPropertyNames(this);
@@ -55,6 +56,9 @@ export class Team {
 		Object.assign(this, ...[scoreSource, recordSource, boxSource]);
 		this.name = `${scoreboardSource.team.teamLocation} ${scoreboardSource.team.teamNickname}`
 		this.slots = boxscoreSource.slots.map(slotSource => new TeamSlot(slotSource));
+		this.totalRealScore = this.slots.map(slot => {
+			return slot.slotCategoryId !== Contracts.LineupPosition.Bench ? slot.currentStatTotal : 0
+		}).reduce((acc, curr) => acc + curr);
 	}
 }
 
@@ -65,6 +69,7 @@ export class TeamSlot {
 	player: {
 		lastName: string;
 		firstName: string;
+		fullName: string;
 		playerId: number;
 		proTeamId: number;
 	}
@@ -77,7 +82,12 @@ export class TeamSlot {
 			lastName: slotSource.player.lastName,
 			firstName: slotSource.player.firstName,
 			playerId: slotSource.player.playerId,
-			proTeamId: slotSource.player.proTeamId
+			proTeamId: slotSource.player.proTeamId,
+			fullName: `${slotSource.player.firstName} ${slotSource.player.lastName}`
 		}
 	}
+}
+
+export type ModelProps = {
+	data: DataModel
 }

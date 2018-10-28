@@ -1,0 +1,27 @@
+.TeamBox {
+	display: flex;
+	flex-direction: column;
+}
+
+.TeamScoreBox {
+	display: flex;
+	flex-direction: row;
+}
+
+.TeamScoreBox > div {
+	flex-basis: 50%;
+}
+
+.Player {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	background-color: gray;
+	color: white;
+}
+
+.PlayerScore {
+	background-color: black;
+	color: white;
+	flex-basis: 25%;
+}
