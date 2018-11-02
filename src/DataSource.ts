@@ -3,7 +3,7 @@ import * as Contracts from './Contracts';
 import { DataModel } from './Model';
 
 const SEASON = 2018
-const PERIOD_ID = 1
+const PERIOD_ID = 9
 
 export class DataSource {
 	public static async getData() : Promise<DataModel> {
@@ -30,6 +30,7 @@ export class DataSource {
 	private static async getBoxscore(matchupPeriod:number, teamId:number) : Promise<Contracts.BoxScoreResponseBody> {
 		const resp = await fetch(`http://games.espn.com/ffl/api/v2/boxscore?leagueId=${process.env.REACT_APP_LEAGUE_ID}&seasonId=${SEASON}&matchupPeriodId=${matchupPeriod}&teamId=${teamId}`)
 		const boxscore:Contracts.BoxScoreResponseBody = await resp.json();
+		// console.log(boxscore);
 		return boxscore;
 	}
 }

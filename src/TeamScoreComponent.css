@@ -12,6 +12,10 @@
 	flex-basis: 50%;
 }
 
+.TeamScore {
+	font-weight: bold;
+}
+
 .Player {
 	display: flex;
 	flex-direction: row;
@@ -20,8 +24,17 @@
 	color: white;
 }
 
+.BenchPlayer {
+	background-color: #404040;
+}
+
 .PlayerScore {
 	background-color: black;
 	color: white;
+	flex-basis: 25%;
+}
+
+.PlayerProjScore {
+	color: gainsboro;
 	flex-basis: 25%;
 }

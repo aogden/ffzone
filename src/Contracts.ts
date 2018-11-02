@@ -170,23 +170,23 @@ export interface BoxScoreTeam {
 }
 
 export interface BoxScoreTeamSlot {
-	currentPeriodRealStats: {
+	currentPeriodRealStats?: {
 		appliedStatTotal: number,
 		appliedStats: {},
 		rawStats: {}
 	},
-	lockStatus: number,
-	currentPeriodProjectedStats: {
+	lockStatus?: number,
+	currentPeriodProjectedStats?: {
 		appliedStatTotal: number,
 		appliedStats: {},
 		rawStats: {}
 	},
-	opponentProTeamId: number,
-	isQueuedWaiverLocked: false,
-	isTradeLocked: false,
-	watchList: false,
+	opponentProTeamId?: number,
+	isQueuedWaiverLocked?: false,
+	isTradeLocked?: false,
+	watchList?: false,
 	slotCategoryId: LineupPosition,
-	player: {
+	player?: {
 		lastName: string,
 		percentOwned: number,
 		lastNewsDate: string,

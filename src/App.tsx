@@ -4,15 +4,19 @@ import { TeamScoreComponent } from './TeamScoreComponent';
 import { PlayerScorePopup, PlayerScorePopupProps } from './PlayerScorePopup';
 import { DataSource } from './DataSource'
 import { DataModel, TeamSlot, Team } from './Model'
+import { LineupPosition } from './Contracts'
+import { MatchupBoxscoreComponent } from './MatchupBoxscoreComponent'
+
+const DATA_POLL_INTERVAL = 10 * 1000;
 
 type State = {
 	data: DataModel,
 	currentPopup?: PlayerScorePopupProps
-	scoreLog:string[],
-	currentMatchupId:number
+	scoreLog: string[]
 }
 
 class App extends React.Component<object, State> {
+	private dataInterval:NodeJS.Timeout;
 	constructor(props: Readonly<{}>) {
 		super(props);
 		this.state = {
@@ -21,26 +25,24 @@ class App extends React.Component<object, State> {
 				currentPeriodId: 0,
 				matchups: []
 			},
-			scoreLog: [],
-			currentMatchupId: 0
+			scoreLog: []
 		}
 	}
 
 	public render() {
-		const matchup = this.state.data.matchups[this.state.currentMatchupId];
-		const teamComp0 = this.getTeamScoreComponent(matchup ? matchup.homeTeamId : -1);
-		const teamComp1 = this.getTeamScoreComponent(matchup ? matchup.awayTeamId : -1);
 		let popup = null;
 		if (this.state.currentPopup) {
 			popup = <PlayerScorePopup team={this.state.currentPopup.team} slot={this.state.currentPopup.slot} scoreDelta={this.state.currentPopup.scoreDelta} />
 		}
-		const logElements = this.state.scoreLog.map((log, index)=> <p key={index}>{log}</p>)
+		const logElements = this.state.scoreLog.map((log, index) => {
+			if (index === this.state.scoreLog.length - 1) {
+				return <h2 key={index}>{log}</h2>
+			}
+			return <p key={index}>{log}</p>
+		}).reverse();
 		return (
 			<div className="App">
-				<div>
-					{teamComp0}
-					{teamComp1}
-				</div>
+				<MatchupBoxscoreComponent data={this.state.data} />
 				{popup}
 				<div className='Logs'>
 					{logElements}
@@ -59,24 +61,22 @@ class App extends React.Component<object, State> {
 
 	componentDidMount() {
 		DataSource.getData().then(data => {
-			this.setState({ data, scoreLog:[], currentMatchupId: 0});
+			this.setState({ data, scoreLog: []});
 		})
 
-		setInterval(() => {
-			console.log('getting data')
+		this.dataInterval = setInterval(() => {
 			DataSource.getData().then(data => {
-				data.teams[1].slots[0].currentStatTotal = Math.round(Math.random() * 100);
+				// data.teams[1].slots[0].currentStatTotal = Math.round(Math.random() * 100);
 				let stateCopy = Object.assign({}, this.state);
-				const newMatchup = this.state.currentMatchupId + 1 < this.state.data.matchups.length ? this.state.currentMatchupId + 1 : 0;
-				this.setState(Object.assign(stateCopy, { data, currentMatchupId: newMatchup }));
+				this.onDataSourceFetch(data);
+				this.setState(Object.assign(stateCopy, { data, currentMatchupId: 5 }));
 			});
-		}, 10000)
+		}, DATA_POLL_INTERVAL)
+		console.log(this.dataInterval);
 	}
 
-	setState(state: State) {
+	onDataSourceFetch(newData: DataModel) {
 		const prevState = this.state;
-		super.setState(state);
-
 		//check for player point updates
 		let teamIds: number[] = [];
 		prevState.data.matchups.forEach(matchup => {
@@ -84,9 +84,11 @@ class App extends React.Component<object, State> {
 		})
 		teamIds.forEach(id => {
 			const prevTeam = prevState.data.teams[id];
-			const newTeam = state.data.teams[id];
+			const newTeam = newData.teams[id];
 			newTeam.slots.forEach((slot, index) => {
+				if (slot.slotCategoryId === LineupPosition.Bench) return;
 				let delta = slot.currentStatTotal - prevTeam.slots[index].currentStatTotal;
+				delta = Math.round(delta * 10) / 10;
 				if (delta !== 0) {
 					this.onPlayerScoreChange(slot, newTeam, delta);
 				}
@@ -95,7 +97,8 @@ class App extends React.Component<object, State> {
 	}
 
 	onPlayerScoreChange(slot: TeamSlot, team: Team, scoreDelta: number) {
-		const log = `${slot.player.fullName} scored ${scoreDelta} points for ${team.name}`;
+		if(!slot.player) return;
+		const log = `${slot.player.fullName} scored ${scoreDelta} points for ${team.name} (${team.totalRealScore.toFixed(2)})`;
 		const stateCopy = Object.assign({}, this.state);
 		stateCopy.scoreLog.push(log);
 		// this.setState(Object.assign(stateCopy, { currentPopup: { slot, team, scoreDelta } }));

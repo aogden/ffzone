@@ -59,31 +59,29 @@ export class Team {
 		this.totalRealScore = this.slots.map(slot => {
 			return slot.slotCategoryId !== Contracts.LineupPosition.Bench ? slot.currentStatTotal : 0
 		}).reduce((acc, curr) => acc + curr);
+		this.appliedActiveProjectedTotal = this.slots.map(slot => {
+			return slot.slotCategoryId !== Contracts.LineupPosition.Bench ? slot.projectedStatTotal : 0
+		}).reduce((acc, curr) => acc + curr);
 	}
 }
 
 export class TeamSlot {
-	slotCategoryId: Contracts.LineupPosition;
-	currentStatTotal: number;
-	projectedStatTotal: number
+	slotCategoryId: Contracts.LineupPosition = -1;
+	currentStatTotal: number = 0;
+	projectedStatTotal: number = 0;
 	player: {
 		lastName: string;
 		firstName: string;
 		fullName: string;
 		playerId: number;
 		proTeamId: number;
-	}
+	} = {lastName:'', firstName:'', fullName:'', playerId:0, proTeamId: 0}
 
 	constructor(slotSource: Contracts.BoxScoreTeamSlot) {
-		this.slotCategoryId = slotSource.slotCategoryId
-		this.currentStatTotal = slotSource.currentPeriodRealStats.appliedStatTotal
-		this.projectedStatTotal = slotSource.currentPeriodProjectedStats.appliedStatTotal
-		this.player = {
-			lastName: slotSource.player.lastName,
-			firstName: slotSource.player.firstName,
-			playerId: slotSource.player.playerId,
-			proTeamId: slotSource.player.proTeamId,
-			fullName: `${slotSource.player.firstName} ${slotSource.player.lastName}`
+		this.slotCategoryId = slotSource.slotCategoryId;
+		Object.assign(this, ...[slotSource]);
+		if(slotSource.player && this.player) {
+			this.player.fullName = `${slotSource.player.firstName} ${slotSource.player.lastName}`
 		}
 	}
 }
