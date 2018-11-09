@@ -1,4 +1,69 @@
-.Container {
-	width: 50%;
-	height: 200px;
+.PopupContainer {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 25px;
+	max-width: 75%;
+	height: 100px;
+	margin: auto;
+	background-color: green;
+	border-style: solid;
+	border-width: 5px;
+	grid-template-columns: 40% 20% auto;
+  grid-template-rows: 100%;
+  grid-template-areas:	"playerItem scoreItem boxScoreItem";
+	display: inline-grid;
+}
+
+.PopupContainer > .PopupPlayer {
+	background-color: white;
+	grid-area: playerItem;
+	display: flex;
+}
+
+.PopupContainer > .PopupPlayer > img {
+	flex-basis: 25px;
+	object-fit: contain;
+	margin-left: 5px;
+}
+
+.PopupContainer > .PopupPlayer > .PopupPlayerText {
+	display: inline-grid;
+	grid-template-rows: 50% 50%;
+	margin: auto;
+}
+
+.PopupContainer > .PopupPlayer > .PopupPlayerText > p {
+	margin: auto;
+}
+
+.PopupContainer > .PopupScore {
+	font-weight: bolder;
+	margin: auto;
+	font-size: 3em;
+	grid-area: scoreItem;
+}
+
+.PopupMatchupContainer {
+	display: flex;
+	flex-direction: column;
+	grid-area: boxScoreItem;
+	background-color: black;
+	padding-left: 10px;
+}
+
+.PopupTeamContainer {
+	flex-basis: 50%;
+	display: inline-grid;
+	grid-template-columns: auto 20% 20%;
+  grid-template-rows: 100%;
+}
+
+.PopupTeamContainer > p {
+	margin: auto;
+	color: whitesmoke;
+}
+
+.PopupTeamContainer > .ProjectedScore {
+	color: grey;
 }

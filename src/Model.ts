@@ -79,6 +79,8 @@ export class TeamSlot {
 
 	constructor(slotSource: Contracts.BoxScoreTeamSlot) {
 		this.slotCategoryId = slotSource.slotCategoryId;
+		if(slotSource.currentPeriodRealStats) this.currentStatTotal = slotSource.currentPeriodRealStats.appliedStatTotal || 0;
+		if(slotSource.currentPeriodProjectedStats) this.projectedStatTotal = slotSource.currentPeriodProjectedStats.appliedStatTotal || 0;
 		Object.assign(this, ...[slotSource]);
 		if(slotSource.player && this.player) {
 			this.player.fullName = `${slotSource.player.firstName} ${slotSource.player.lastName}`

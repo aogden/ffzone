@@ -1,22 +1,22 @@
 import * as React from 'react';
 import './App.css';
 import { TeamScoreComponent } from './TeamScoreComponent';
-import { PlayerScorePopup, PlayerScorePopupProps } from './PlayerScorePopup';
 import { DataSource } from './DataSource'
 import { DataModel, TeamSlot, Team } from './Model'
 import { LineupPosition } from './Contracts'
 import { MatchupBoxscoreComponent } from './MatchupBoxscoreComponent'
+import { ScorePopupCoordinator, MatchupDataSource } from './ScorePopupCoordinator'
 
 const DATA_POLL_INTERVAL = 10 * 1000;
 
 type State = {
 	data: DataModel,
-	currentPopup?: PlayerScorePopupProps
 	scoreLog: string[]
 }
 
-class App extends React.Component<object, State> {
+class App extends React.Component<object, State> implements MatchupDataSource {
 	private dataInterval:NodeJS.Timeout;
+	private popupCoordinator = new ScorePopupCoordinator(this);
 	constructor(props: Readonly<{}>) {
 		super(props);
 		this.state = {
@@ -30,10 +30,7 @@ class App extends React.Component<object, State> {
 	}
 
 	public render() {
-		let popup = null;
-		if (this.state.currentPopup) {
-			popup = <PlayerScorePopup team={this.state.currentPopup.team} slot={this.state.currentPopup.slot} scoreDelta={this.state.currentPopup.scoreDelta} />
-		}
+		let popup = this.popupCoordinator.getPlayerScorePopup();
 		const logElements = this.state.scoreLog.map((log, index) => {
 			if (index === this.state.scoreLog.length - 1) {
 				return <h2 key={index}>{log}</h2>
@@ -66,7 +63,7 @@ class App extends React.Component<object, State> {
 
 		this.dataInterval = setInterval(() => {
 			DataSource.getData().then(data => {
-				// data.teams[1].slots[0].currentStatTotal = Math.round(Math.random() * 100);
+				data.teams[(Math.random() * Object.keys(data.teams).length).toFixed(0)].slots[0].currentStatTotal = Math.round(Math.random() * 100);
 				let stateCopy = Object.assign({}, this.state);
 				this.onDataSourceFetch(data);
 				this.setState(Object.assign(stateCopy, { data, currentMatchupId: 5 }));
@@ -101,8 +98,12 @@ class App extends React.Component<object, State> {
 		const log = `${slot.player.fullName} scored ${scoreDelta} points for ${team.name} (${team.totalRealScore.toFixed(2)})`;
 		const stateCopy = Object.assign({}, this.state);
 		stateCopy.scoreLog.push(log);
-		// this.setState(Object.assign(stateCopy, { currentPopup: { slot, team, scoreDelta } }));
+		this.popupCoordinator.onPlayerScoreChange(slot, team, scoreDelta);
 		this.setState(stateCopy);
+	}
+
+	getData() {
+		return this.state.data;
 	}
 }
 
