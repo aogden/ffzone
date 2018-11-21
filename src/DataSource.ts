@@ -3,7 +3,7 @@ import * as Contracts from './Contracts';
 import { DataModel } from './Model';
 
 const SEASON = 2018
-const PERIOD_ID = 11
+const PERIOD_ID = 12
 
 export class DataSource {
 	public static async getData() : Promise<DataModel> {

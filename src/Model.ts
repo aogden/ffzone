@@ -7,7 +7,8 @@ type ProGame = {
 	awayProTeamId: number,
 	homeProTeamId: number,
 	period: number,
-	timeRemainingInPeriod: string
+	timeRemainingInPeriod: string,
+	id: string
 }
 
 export class DataModel {
@@ -29,18 +30,23 @@ export class DataModel {
 			this.matchups.push({ homeTeamId: matchup.teams[0].teamId, awayTeamId: matchup.teams[1].teamId })
 		})
 		scoreTeams = lodash.uniq(scoreTeams);
+
+		// Collect all progames from all boxscores
 		this.proGames = [];
-		if(boxscores.length > 0) {
-			//Populate pro games from first boxscore (all are the same)
-			lodash.forOwn(boxscores[0].progames, (value, key) => {
-				this.proGames.push({
-					awayProTeamId: value.awayProTeamId,
-					homeProTeamId: value.homeProTeamId,
-					period: value.period,
-					timeRemainingInPeriod: value.timeRemainingInPeriod
-				})
+		boxscores.forEach((box) => {
+			lodash.forOwn(box.progames, (value, key) => {
+				if(!this.proGames.find(game => game.id === key)) {
+					this.proGames.push({
+						awayProTeamId: value.awayProTeamId,
+						homeProTeamId: value.homeProTeamId,
+						period: value.period,
+						timeRemainingInPeriod: value.timeRemainingInPeriod,
+						id: key
+					})
+				}
 			})
-		}
+		});
+
 		let teams = {};
 		scoreTeams.forEach(team => {
 			const boxscore = boxscores.find(box => !!box.teams.find(val => val.teamId === team.teamId))
@@ -93,7 +99,7 @@ export class Team {
 
 	public updateProjectedTotal(proGames:ProGame[]) {
 		this.slots.forEach(slot => {
-			slot.projectedStatTotal = Team.getProjection(slot,proGames);
+			slot.projectedStatTotal = Math.round((Team.getProjection(slot,proGames)*100))/100;
 		});
 		this.appliedActiveProjectedTotal = this.slots.map(slot => {
 				return slot.projectedStatTotal;
@@ -108,7 +114,7 @@ export class Team {
 			return slot.player.proTeamId === game.awayProTeamId || slot.player.proTeamId === game.homeProTeamId
 		})
 		if(!proGame) {
-			console.warn(`no pro game found for ${slot.player.fullName} returning base projection`)
+			console.warn(`no pro game found for ${slot.player.fullName} returning base projection `, proGames)
 			return slot.projectedStatTotal;
 		}
 		const percentComplete = Team.getPercentComplete(proGame);

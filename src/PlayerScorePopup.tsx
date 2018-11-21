@@ -2,6 +2,7 @@ import * as React from 'react'
 import {Team, TeamSlot} from './Model'
 import './PlayerScorePopup.css';
 import {AssetUtil} from './AssetUtil'
+import {DISPLAY_TIME} from './ScorePopupCoordinator'
 
 export type PlayerScorePopupProps = {
 	team:Team,
@@ -50,5 +51,11 @@ export class PlayerScorePopup extends React.Component<PlayerScorePopupProps,obje
 			</div>
 		}
 		return (el);
+	}
+
+	componentDidMount() {
+		setInterval(() => {
+			console.log('Update state to hide')
+		}, DISPLAY_TIME);
 	}
 }

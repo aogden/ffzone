@@ -6,6 +6,7 @@ import { DataModel, TeamSlot, Team } from './Model'
 import { LineupPosition } from './Contracts'
 import { MatchupBoxscoreComponent } from './MatchupBoxscoreComponent'
 import { ScorePopupCoordinator, MatchupDataSource } from './ScorePopupCoordinator'
+import Iframe from 'react-iframe'
 
 const DATA_POLL_INTERVAL = 10 * 1000;
 
@@ -15,7 +16,7 @@ type State = {
 }
 
 class App extends React.Component<object, State> implements MatchupDataSource {
-	private dataInterval:NodeJS.Timeout;
+	private dataInterval: NodeJS.Timeout;
 	private popupCoordinator = new ScorePopupCoordinator(this);
 	constructor(props: Readonly<{}>) {
 		super(props);
@@ -32,19 +33,27 @@ class App extends React.Component<object, State> implements MatchupDataSource {
 
 	public render() {
 		let popup = this.popupCoordinator.getPlayerScorePopup();
-		const logElements = this.state.scoreLog.map((log, index) => {
-			if (index === this.state.scoreLog.length - 1) {
-				return <h2 key={index}>{log}</h2>
-			}
-			return <p key={index}>{log}</p>
-		}).reverse();
+		// const logElements = this.state.scoreLog.map((log, index) => {
+		// 	if (index === this.state.scoreLog.length - 1) {
+		// 		return <h2 key={index}>{log}</h2>
+		// 	}
+		// 	return <p key={index}>{log}</p>
+		// }).reverse();
 		return (
 			<div className="App">
+				<Iframe url="http://www.youtube.com/embed/xDMP3i36naA"
+					width="100%"
+					height="100%"
+					id="myId"
+					className="myClassname"
+					display="initial"
+					position="absolute"
+					allowFullScreen />
 				<MatchupBoxscoreComponent data={this.state.data} />
 				{popup}
-				<div className='Logs'>
+				{/* <div className='Logs'>
 					{logElements}
-				</div>
+				</div> */}
 			</div>
 		);
 	}
@@ -59,7 +68,7 @@ class App extends React.Component<object, State> implements MatchupDataSource {
 
 	componentDidMount() {
 		DataSource.getData().then(data => {
-			this.setState({ data, scoreLog: []});
+			this.setState({ data, scoreLog: [] });
 		})
 
 		this.dataInterval = setInterval(() => {
@@ -95,7 +104,7 @@ class App extends React.Component<object, State> implements MatchupDataSource {
 	}
 
 	onPlayerScoreChange(slot: TeamSlot, team: Team, scoreDelta: number) {
-		if(!slot.player) return;
+		if (!slot.player) return;
 		const log = `${slot.player.fullName} scored ${scoreDelta} points for ${team.name} (${team.totalRealScore.toFixed(2)})`;
 		const stateCopy = Object.assign({}, this.state);
 		stateCopy.scoreLog.push(log);

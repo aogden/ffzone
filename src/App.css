@@ -6,6 +6,7 @@
 
 .App > div {
   flex-basis: 50%;
+  position: absolute;
 }
 
 .Logs {
