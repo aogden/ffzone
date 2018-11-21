@@ -84,20 +84,22 @@ export interface BoxScore {
 	scheduleItems: BoxScoreScheduleItem[]
 	teams: BoxScoreTeam[],
 	progames: {
-		[id: number]: {
-			awayProTeamId: number
-			awayScore: number
-			gameDate: string
-			gameId: number
-			homeProTeamId: number
-			homeScore: number
-			period: number
-			status: number
-			timeRemainingInPeriod: string
-		}
+		[id: number]: ProGameMatchup
 	},
 	homeTeamBonus: number,
 	scoringPeriodId: number
+}
+
+export interface ProGameMatchup {
+	awayProTeamId: number
+	awayScore: number
+	gameDate: string
+	gameId: number
+	homeProTeamId: number
+	homeScore: number
+	period: number
+	status: number
+	timeRemainingInPeriod: string
 }
 
 export interface BoxScoreScheduleItem {

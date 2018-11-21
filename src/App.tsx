@@ -23,7 +23,8 @@ class App extends React.Component<object, State> implements MatchupDataSource {
 			data: {
 				teams: [],
 				currentPeriodId: 0,
-				matchups: []
+				matchups: [],
+				proGames: []
 			},
 			scoreLog: []
 		}
