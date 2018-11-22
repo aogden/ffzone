@@ -2,7 +2,7 @@ import * as React from 'react'
 import { TeamSlot, Team, DataModel } from './Model'
 import { PlayerScorePopup, SimpleMatchupData } from './PlayerScorePopup'
 
-export const DISPLAY_TIME = 3 * 1000;
+export const DISPLAY_TIME = 5 * 1000;
 const INTERESTING_SCORE_THRESHOLD = 0.2;
 const QUEUE_EXPIRATION_TIME = 20 * 1000;
 
@@ -59,6 +59,7 @@ export class ScorePopupCoordinator {
 
 		//grab front
 		this.currentPopupItem = this.popupQueue.shift();
+		console.log(`post process queue is `, this.popupQueue)
 
 		//schedule popup disappear and reprocess
 		setInterval(() => {
@@ -70,9 +71,12 @@ export class ScorePopupCoordinator {
 	getPlayerScorePopup(): JSX.Element | null {
 		if (!this.currentPopupItem) return null;
 
-		const matchup = this.getSimpleMatchupForTeam(this.currentPopupItem.team.teamId);
+		console.log('returning el for popup item ', this.currentPopupItem)
 
-		return <PlayerScorePopup team={this.currentPopupItem.team} slot={this.currentPopupItem.slot} scoreDelta={this.currentPopupItem.scoreDelta} matchup={matchup} />
+		const matchup = this.getSimpleMatchupForTeam(this.currentPopupItem.team.teamId);
+		const el = <PlayerScorePopup team={this.currentPopupItem.team} slot={this.currentPopupItem.slot} scoreDelta={this.currentPopupItem.scoreDelta} matchup={matchup} />
+
+		return el
 	}
 
 	getSimpleMatchupForTeam(teamId:number): SimpleMatchupData {

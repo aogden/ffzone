@@ -4,7 +4,6 @@ import { TeamScoreComponent } from './TeamScoreComponent';
 import { DataSource } from './DataSource'
 import { DataModel, TeamSlot, Team } from './Model'
 import { LineupPosition } from './Contracts'
-import { MatchupBoxscoreComponent } from './MatchupBoxscoreComponent'
 import { ScorePopupCoordinator, MatchupDataSource } from './ScorePopupCoordinator'
 import Iframe from 'react-iframe'
 
@@ -33,27 +32,15 @@ class App extends React.Component<object, State> implements MatchupDataSource {
 
 	public render() {
 		let popup = this.popupCoordinator.getPlayerScorePopup();
-		// const logElements = this.state.scoreLog.map((log, index) => {
-		// 	if (index === this.state.scoreLog.length - 1) {
-		// 		return <h2 key={index}>{log}</h2>
-		// 	}
-		// 	return <p key={index}>{log}</p>
-		// }).reverse();
 		return (
 			<div className="App">
-				<Iframe url="http://www.youtube.com/embed/xDMP3i36naA"
+				<Iframe url={process.env.REACT_APP_VIDEO_URL}
 					width="100%"
 					height="100%"
-					id="myId"
-					className="myClassname"
 					display="initial"
 					position="absolute"
 					allowFullScreen />
-				<MatchupBoxscoreComponent data={this.state.data} />
 				{popup}
-				{/* <div className='Logs'>
-					{logElements}
-				</div> */}
 			</div>
 		);
 	}
@@ -73,7 +60,7 @@ class App extends React.Component<object, State> implements MatchupDataSource {
 
 		this.dataInterval = setInterval(() => {
 			DataSource.getData().then(data => {
-				data.teams[(Math.random() * Object.keys(data.teams).length).toFixed(0)].slots[0].currentStatTotal = Math.round(Math.random() * 100);
+				data.teams[(Math.random() * Object.keys(data.teams).length).toFixed(0)].slots[1].currentStatTotal = Math.round(Math.random() * 100);
 				let stateCopy = Object.assign({}, this.state);
 				this.onDataSourceFetch(data);
 				this.setState(Object.assign(stateCopy, { data, currentMatchupId: 5 }));

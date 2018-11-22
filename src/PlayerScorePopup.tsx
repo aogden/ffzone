@@ -22,16 +22,30 @@ export type SimpleTeamData = {
 	actualScore:number
 }
 
-export class PlayerScorePopup extends React.Component<PlayerScorePopupProps,object> {
+type State = {
+	showing: boolean
+}
+
+
+export class PlayerScorePopup extends React.Component<PlayerScorePopupProps,State> {
+	constructor(props: PlayerScorePopupProps) {
+		super(props);
+		this.state = {showing:false};
+	}
+
 	render() {
+		if(!this.state.showing) {
+			return null;
+		}
+
 		let el = null;
 		const playerNameStyle = {'fontWeight': 'bold', fontSize: '1.5em'} as React.CSSProperties
 		const teamStyle = {fontSize: '0.9em'} as React.CSSProperties;
 		const generateMatchupElements = (team:SimpleTeamData):JSX.Element[] => {
 			return [
-				<p>{team.name}</p>,
-				<p className='ProjectedScore'>{team.projectedScore.toFixed(2)}</p>,
-				<p>{team.actualScore.toFixed(2)}</p>
+				<p key="name">{team.name}</p>,
+				<p className='ProjectedScore' key="projScore">{team.projectedScore.toFixed(2)}</p>,
+				<p key="actualScore">{team.actualScore.toFixed(2)}</p>
 			]
 		}
 		if(this.props.team) {
@@ -53,9 +67,13 @@ export class PlayerScorePopup extends React.Component<PlayerScorePopupProps,obje
 		return (el);
 	}
 
-	componentDidMount() {
-		setInterval(() => {
-			console.log('Update state to hide')
-		}, DISPLAY_TIME);
+	componentDidUpdate(prevProps:PlayerScorePopupProps) {
+		if(prevProps !== this.props) {
+			this.setState({showing:true})
+			setTimeout(() => {
+				console.log('Update state to hide')
+				this.setState({showing:false});
+			}, DISPLAY_TIME);
+		}
 	}
 }

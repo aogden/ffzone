@@ -20,7 +20,6 @@ export class MatchupBoxscoreComponent extends React.Component<Props, State> {
 		this.state = { currentMatchupId: 0, autoProgress: true }
 	}
 	render() {
-		return null;
 		const matchup = this.props.data.matchups[this.state.currentMatchupId];
 		const teamComp0 = this.getTeamScoreComponent(matchup ? matchup.homeTeamId : -1);
 		const teamComp1 = this.getTeamScoreComponent(matchup ? matchup.awayTeamId : -1);
