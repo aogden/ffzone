@@ -114,12 +114,12 @@ export class Team {
 			return slot.player.proTeamId === game.awayProTeamId || slot.player.proTeamId === game.homeProTeamId
 		})
 		if(!proGame) {
-			console.warn(`no pro game found for ${slot.player.fullName} returning base projection `, proGames)
+			// console.warn(`no pro game found for ${slot.player.fullName} returning base projection `, proGames)
 			return slot.projectedStatTotal;
 		}
 		const percentComplete = Team.getPercentComplete(proGame);
 		const projection = slot.currentStatTotal + (1 - percentComplete) * slot.projectedStatTotal;
-		console.log(`projecting ${projection} points for ${slot.player.fullName} with ${slot.currentStatTotal} current points ${slot.projectedStatTotal} projected points and their game ${percentComplete} complete`)
+		// console.log(`projecting ${projection} points for ${slot.player.fullName} with ${slot.currentStatTotal} current points ${slot.projectedStatTotal} projected points and their game ${percentComplete} complete`)
 		return projection;
 	}
 

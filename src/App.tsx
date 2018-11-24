@@ -60,7 +60,7 @@ class App extends React.Component<object, State> implements MatchupDataSource {
 
 		this.dataInterval = setInterval(() => {
 			DataSource.getData().then(data => {
-				data.teams[(Math.random() * Object.keys(data.teams).length).toFixed(0)].slots[1].currentStatTotal = Math.round(Math.random() * 100);
+				// data.teams[(Math.random() * Object.keys(data.teams).length).toFixed(0)].slots[2].currentStatTotal = Math.round(Math.random() * 100);
 				let stateCopy = Object.assign({}, this.state);
 				this.onDataSourceFetch(data);
 				this.setState(Object.assign(stateCopy, { data, currentMatchupId: 5 }));

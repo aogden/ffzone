@@ -62,7 +62,7 @@ export class ScorePopupCoordinator {
 		console.log(`post process queue is `, this.popupQueue)
 
 		//schedule popup disappear and reprocess
-		setInterval(() => {
+		setTimeout(() => {
 			this.currentPopupItem = undefined;
 			this.processQueue();
 		}, DISPLAY_TIME)

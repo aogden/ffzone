@@ -66,9 +66,15 @@ export class PlayerScorePopup extends React.Component<PlayerScorePopupProps,Stat
 		}
 		return (el);
 	}
+	
+	componentDidMount() {
+		this.setState({showing:true})
+	}
 
 	componentDidUpdate(prevProps:PlayerScorePopupProps) {
-		if(prevProps !== this.props) {
+		console.log(`component update prev ${prevProps.slot.player.playerId} new is ${this.props.slot.player.playerId}`)
+		if(prevProps.slot.player.playerId !== this.props.slot.player.playerId) {
+			console.log(`Update state to show`)
 			this.setState({showing:true})
 			setTimeout(() => {
 				console.log('Update state to hide')
