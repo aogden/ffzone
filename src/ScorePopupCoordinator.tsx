@@ -2,7 +2,7 @@ import * as React from 'react'
 import { TeamSlot, Team, DataModel } from './Model'
 import { PlayerScorePopup, SimpleMatchupData } from './PlayerScorePopup'
 
-export const DISPLAY_TIME = 5 * 1000;
+export const DISPLAY_TIME = 500 * 1000;
 const INTERESTING_SCORE_THRESHOLD = 0.2;
 const QUEUE_EXPIRATION_TIME = 20 * 1000;
 

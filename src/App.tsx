@@ -40,6 +40,7 @@ class App extends React.Component<object, State> implements MatchupDataSource {
 					display="initial"
 					position="absolute"
 					allowFullScreen />
+				<img src="https://cdn.vox-cdn.com/thumbor/l_V-K3mdVi2sSlWjUNMROvN2_W4=/0x0:3384x2549/1820x1213/filters:focal(1970x816:2510x1356):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/61598345/usa_today_11351731.0.jpg"></img>
 				{popup}
 			</div>
 		);
@@ -60,11 +61,14 @@ class App extends React.Component<object, State> implements MatchupDataSource {
 
 		this.dataInterval = setInterval(() => {
 			DataSource.getData().then(data => {
-				// data.teams[(Math.random() * Object.keys(data.teams).length).toFixed(0)].slots[2].currentStatTotal = Math.round(Math.random() * 100);
+				data.teams[(Math.random() * Object.keys(data.teams).length).toFixed(0)].slots[2].currentStatTotal = Math.round(Math.random() * 100);
 				let stateCopy = Object.assign({}, this.state);
 				this.onDataSourceFetch(data);
 				this.setState(Object.assign(stateCopy, { data, currentMatchupId: 5 }));
 			});
+
+			//AO TESTINg
+			clearInterval(this.dataInterval);
 		}, DATA_POLL_INTERVAL)
 		console.log(this.dataInterval);
 	}

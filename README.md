@@ -2,6 +2,8 @@
 
 Track fantasy football scores and display inline with TV broadcast
 
+![Imgur](https://i.imgur.com/SPAXRqa.jpg)
+
 ## Install
 
 `$ npm install`
